@@ -2,7 +2,15 @@ const router = require('express').Router()
 
 const Users = require('./users-model.js')
 
-router.get('/', (req, res)=> {
+function secure(req, res, next) {
+    if (req.session && req.session.user){
+        next()
+    } else {
+        res.status(401).json({ message: 'unauthorized' })
+    }
+}
+
+router.get('/', secure, (req, res)=> {
     Users.find()
     .then(user => {
         res.status(200).json(user)

@@ -52,6 +52,17 @@ server.post('/auth/login', async (req, res) => {
     }
 })
 
+server.get('/auth/logout', (req, res)=> {
+    if (req.session && req.session.user) {
+        req.session.destroy(err => {
+            if (err) res.json({ message: ' you cannot leave'})
+            else res.json({ message: 'good bye'})
+        })
+    } else { 
+        res.json({ message: 'you had no session'})
+    }
+})
+
 
 server.use('/api/users', UsersRouter)
 
